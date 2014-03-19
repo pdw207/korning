@@ -2,6 +2,7 @@ class CreateProductSales < ActiveRecord::Migration
   def up
     create_table :product_sales do |t|
       t.integer :units, default: 1
+      t.integer :sale_price, null: false
       t.integer :product_id, null: false
       t.integer :sale_id, null: false
       t.timestamps
@@ -11,6 +12,7 @@ class CreateProductSales < ActiveRecord::Migration
       new_row = ProductSale.new
       new_row.sale_id = e.id
       new_row.units = e.units_sold
+      new_row.sale_price = (e.sale_amount / e.units_sold).to_f.round(2)*100
       new_row.product_id = Product.where(name: e.product_name).take.id
       new_row.save
     end
